@@ -1,0 +1,9 @@
+---
+projectName: WurstLinq
+dependencies:
+- https://github.com/wurstscript/wurstStdlib2
+- https://github.com/jlfarris91/WurstCore
+buildMapData:
+  name: MyMapName
+  fileName: MyMapFile
+  author: jlfar
