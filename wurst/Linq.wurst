@@ -9,10 +9,6 @@ import IEqualityComparer
 import LinkedList
 import HashList
 
-import public LinqLinkedList
-import public LinqHashList
-import public LinqHashMap
-
 // ============================================================================
 public function IEnumerable<TSource>.forEach<TSource>(Action1<TSource> action)
   let iter = this.iterator()
@@ -104,7 +100,7 @@ public function IEnumerable<TSource>.all<TSource>(Predicate<TSource> predicate) 
 /** Determines whether the sequence contains any elements. */
 public function IEnumerable<TSource>.any<TSource>() returns bool
   let iter = this.iterator()
-  let result = not iter.hasNext()
+  let result = iter.hasNext()
   destroy iter
   return result
 
@@ -511,7 +507,7 @@ class EmptyEnumerator<T> implements IEnumerator<T>
     return null
 
   // --------------------------------------------------------------------------
-  function close()
+  override function close()
     destroy this
 
 // ============================================================================
@@ -548,7 +544,7 @@ class SingleElementEnumerator<T> implements IEnumerator<T>
     return _element
 
   // --------------------------------------------------------------------------
-  function close()
+  override function close()
     destroy this
 
 // ============================================================================
@@ -618,7 +614,7 @@ class TransformEnumerator<TSource, TResult> implements IEnumerator<TResult>
     return _transform.execute(_child.next())
 
   // --------------------------------------------------------------------------
-  function close()
+  override function close()
     destroy this
 
 // ============================================================================
@@ -698,7 +694,7 @@ class TransformManyEnumerator<TSource, TResult> implements IEnumerator<TResult>
     return _currentEnumerator.next()
 
   // --------------------------------------------------------------------------
-  function close()
+  override function close()
     destroy this
 
 // ============================================================================
@@ -775,7 +771,7 @@ class TakeEnumerator<TSource> implements IEnumerator<TSource>
     return _child.next()
 
   // --------------------------------------------------------------------------
-  function close()
+  override function close()
     destroy this
     
 // ============================================================================
@@ -838,5 +834,5 @@ class PredicateEnumerator<TSource> implements IEnumerator<TSource>
     return _next
 
   // --------------------------------------------------------------------------
-  function close()
+  override function close()
     destroy this
