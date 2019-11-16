@@ -1,6 +1,7 @@
 package LinqTests
 import LinkedList
 import Linq
+import Enumerable
 
 class TestInt
   int value

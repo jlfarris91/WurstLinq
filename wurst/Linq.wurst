@@ -1,6 +1,5 @@
 package Linq
 import Enumerable
-import Action
 import Predicate
 import Func
 import ErrorHandling
@@ -8,24 +7,6 @@ import ErrorIf
 import IEqualityComparer
 import LinkedList
 import HashList
-
-// ============================================================================
-public function IEnumerable<TSource>.forEach<TSource>(Action1<TSource> action)
-  let iter = this.iterator()
-  while (iter.hasNext())
-    action.execute(iter.next())
-  destroy iter
-  destroy action
-
-// ============================================================================
-public function IEnumerable<TSource>.forEach<TSource>(Action2<int, TSource> action)
-  let iter = this.iterator()
-  var index = 0
-  while (iter.hasNext())
-    action.execute(index, iter.next())
-    index++
-  destroy iter
-  destroy action
 
 // ============================================================================
 /** Applies an accumulator function over a sequence. The specified seed value is used as the initial accumulator value, and the specified function is used to select the result value. */
