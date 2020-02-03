@@ -696,7 +696,7 @@ class SkipEnumerable<T> implements IEnumerable<T>
   // --------------------------------------------------------------------------
   override function iterator() returns IEnumerator<T>
     let iter = _child.iterator()
-    var index = 0
+    let index = 0
     while (iter.hasNext() and index < _count)
       iter.next()
     return iter
