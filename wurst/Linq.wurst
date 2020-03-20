@@ -18,9 +18,9 @@ public function IEnumerable<TSource>.aggregate<TSource, TAccumulate, TResult>(TA
   var accumulate = seed
   
   while (iter.hasNext())
-    accumulate = func.execute(accumulate, iter.next())
+    accumulate = func.call(accumulate, iter.next())
   
-  let result = resultSelector.execute(accumulate)
+  let result = resultSelector.call(accumulate)
   
   destroy iter
   destroy func
@@ -37,7 +37,7 @@ public function IEnumerable<TSource>.aggregate<TSource, TAccumulate>(TAccumulate
   var result = seed
   
   while (iter.hasNext())
-    result = func.execute(result, iter.next())
+    result = func.call(result, iter.next())
   
   destroy iter
   destroy func
@@ -57,7 +57,7 @@ public function IEnumerable<TSource>.aggregate<TSource>(Func2<TSource, TSource, 
   var result = iter.next()
   
   while (iter.hasNext())
-    result = func.execute(result, iter.next())
+    result = func.call(result, iter.next())
   
   destroy iter
   destroy func
@@ -70,7 +70,7 @@ public function IEnumerable<TSource>.all<TSource>(Predicate<TSource> predicate) 
   let iter = this.iterator()
   var result = true
   while (iter.hasNext())
-    if (predicate.execute(iter.next()) == false)
+    if (predicate.call(iter.next()) == false)
       result = false
       break
   destroy iter
@@ -91,7 +91,7 @@ public function IEnumerable<TSource>.any<TSource>(Predicate<TSource> predicate) 
   let iter = this.iterator()
   var result = false
   while (iter.hasNext())
-    if (predicate.execute(iter.next()) == true)
+    if (predicate.call(iter.next()) == true)
       result = true
       break
   destroy iter
@@ -135,7 +135,7 @@ public function IEnumerable<TSource>.average<TSource>(Func1<TSource, int> select
   var count = 0
   var result = 0
   while iter.hasNext()
-    result += selector.execute(iter.next())
+    result += selector.call(iter.next())
     count++
   if (count == 0)
     error("Sequence has no elements")
@@ -151,7 +151,7 @@ public function IEnumerable<TSource>.average<TSource>(Func1<TSource, real> selec
   var count = 0
   var result = 0.0
   while iter.hasNext()
-    result += selector.execute(iter.next())
+    result += selector.call(iter.next())
     count++
   if (count == 0)
     error("Sequence has no elements")
@@ -203,7 +203,7 @@ public function IEnumerable<TSource>.count<TSource>(Predicate<TSource> predicate
   let iter = this.iterator()
   var result = 0
   while iter.hasNext()
-    if (predicate.execute(iter.next()))
+    if (predicate.call(iter.next()))
       result++
   destroy iter
   destroy predicate
@@ -307,7 +307,7 @@ public function IEnumerable<TSource>.min<TSource>(Func1<TSource, int> selector) 
   while (iter.hasNext())
     hasElements = true
     let element = iter.next()
-    let value = selector.execute(element)
+    let value = selector.call(element)
     if (value < min)
       min = value
       result = element
@@ -330,7 +330,7 @@ public function IEnumerable<TSource>.min<TSource>(Func1<TSource, real> selector)
   while (iter.hasNext())
     hasElements = true
     let element = iter.next()
-    let value = selector.execute(element)
+    let value = selector.call(element)
     if (value < min)
       min = value
       result = element
@@ -353,7 +353,7 @@ public function IEnumerable<TSource>.max<TSource>(Func1<TSource, int> selector) 
   while (iter.hasNext())
     hasElements = true
     let element = iter.next()
-    let value = selector.execute(element)
+    let value = selector.call(element)
     if (value > max)
       max = value
       result = element
@@ -376,7 +376,7 @@ public function IEnumerable<TSource>.max<TSource>(Func1<TSource, real> selector)
   while (iter.hasNext())
     hasElements = true
     let element = iter.next()
-    let value = selector.execute(element)
+    let value = selector.call(element)
     if (value > max)
       max = value
       result = element
@@ -592,7 +592,7 @@ class TransformEnumerator<TSource, TResult> implements IEnumerator<TResult>
 
   // --------------------------------------------------------------------------
   override function next() returns TResult
-    return _transform.execute(_child.next())
+    return _transform.call(_child.next())
 
   // --------------------------------------------------------------------------
   override function close()
@@ -661,7 +661,7 @@ class TransformManyEnumerator<TSource, TResult> implements IEnumerator<TResult>
         _currentEnumerable = null
 
     while (_child.hasNext())
-      _currentEnumerable = _transform.execute(_child.next())
+      _currentEnumerable = _transform.call(_child.next())
       if (_currentEnumerable == null)
         error("Cannot enumerate null object")
       _currentEnumerator = _currentEnumerable.iterator()
@@ -804,7 +804,7 @@ class PredicateEnumerator<TSource> implements IEnumerator<TSource>
     var retVal = false
     while (_child.hasNext())
       let next = _child.next()
-      if (_predicate.execute(next))
+      if (_predicate.call(next))
         _next = next
         retVal = true
         break
